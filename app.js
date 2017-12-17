@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
+var url = require("url");
 var config = require('./config.js');
 var baseHash = require('./baseHash.js');
 
@@ -21,6 +22,13 @@ app.get('/', function(req, res) {
 
 app.get('/api/shorten', function(req, res) {
   var longUrl = req.headers.url;
+  var result = url.parse(longUrl);
+	if(!result.protocol) longUrl = 'https://' + longUrl;
+	if(!result.host) {
+		res.send("Not a valid URL");
+		return;
+	}
+  
   var shortUrl = '';
   
   MongoClient.connect(db_url, function(err, client) {
@@ -36,6 +44,7 @@ app.get('/api/shorten', function(req, res) {
 	  		shortUrl = config.webhost + baseHash.encode(doc._id);
 	  		res.send(shortUrl);
 	  		client.close();
+	  		return;
 	  	}
 	  	else {
 	  		var countersCollection = db.collection('counters');
@@ -52,6 +61,7 @@ app.get('/api/shorten', function(req, res) {
 	  					if (err) throw err;
 	  					client.close();
 	  					res.send(shortUrl);
+	  					return;
 	  				});
 	  			});
 	  		});
@@ -62,6 +72,7 @@ app.get('/api/shorten', function(req, res) {
 });
 
 app.get('/:encoded_id', function(req, res){
+	res.statusCode = 302;
 	var hashedUrl = req.params.encoded_id;
 	var id = baseHash.decode(hashedUrl);
 
