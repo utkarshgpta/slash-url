@@ -1,0 +1,29 @@
+{
+  "name": "short.en",
+  "version": "1.0.0",
+  "description": "URL Shortener",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UtkarshGpta/short.en.git"
+  },
+  "keywords": [
+    "url",
+    "shortener",
+    "nodejs",
+    "mongodb"
+  ],
+  "author": "Utkarsh Gupta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UtkarshGpta/short.en/issues"
+  },
+  "homepage": "https://github.com/UtkarshGpta/short.en#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongodb": "^3.0.0-rc0"
+  }
+}

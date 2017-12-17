@@ -21,9 +21,11 @@ app.get('/', function(req, res) {
 });
 
 app.get('/api/shorten', function(req, res) {
+  
   var longUrl = req.headers.url;
   var result = url.parse(longUrl);
 	if(!result.protocol) longUrl = 'https://' + longUrl;
+	result = url.parse(longUrl);
 	if(!result.host) {
 		res.send("Not a valid URL");
 		return;
@@ -94,7 +96,6 @@ app.get('/:encoded_id', function(req, res){
 	  });
 	});
 });
-
 
 var server = app.listen(3000, function(){
   console.log('Server listening on port 3000');
