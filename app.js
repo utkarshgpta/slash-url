@@ -2,9 +2,11 @@ var express = require('express');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var url = require("url");
+var path = require('path');
 var config = require('./config.js');
 var baseHash = require('./baseHash.js');
 
+app.use(express.static(path.join(__dirname, 'public')));
 var db_url = config.db.host + ':' + config.db.port;
 
 MongoClient.connect(db_url, function(err, client) {
@@ -17,11 +19,10 @@ MongoClient.connect(db_url, function(err, client) {
 });
 
 app.get('/', function(req, res) {
-	res.send('Hello');
+	res.sendFile(path.join(__dirname, 'views/index.html'));
 });
 
 app.get('/api/shorten', function(req, res) {
-  
   var longUrl = req.headers.url;
   var result = url.parse(longUrl);
 	if(!result.protocol) longUrl = 'https://' + longUrl;
