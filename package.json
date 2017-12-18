@@ -25,6 +25,7 @@
   "homepage": "https://github.com/UtkarshGpta/short.en#readme",
   "dependencies": {
     "express": "^4.16.2",
-    "mongodb": "^3.0.0-rc0"
+    "mongodb": "^3.0.0-rc0",
+    "redis": "^2.8.0"
   }
 }

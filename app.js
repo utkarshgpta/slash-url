@@ -3,11 +3,17 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var url = require("url");
 var path = require('path');
+var redis = require('redis');
 var config = require('./config.js');
 var baseHash = require('./baseHash.js');
 
 app.use(express.static(path.join(__dirname, 'public')));
 var db_url = config.db.host + ':' + config.db.port;
+var rClient = redis.createClient();
+
+rClient.on('connect', function() {
+    console.log('Redis Connected');
+});
 
 MongoClient.connect(db_url, function(err, client) {
 	if (err) throw err;
@@ -32,47 +38,61 @@ app.get('/api/shorten', function(req, res) {
 	if(!result.host) {
 		res.send("Not a valid URL");
 		return;
-	}
-  
-  var shortUrl = '';
-  
-  MongoClient.connect(db_url, function(err, client) {
-	  if (err) throw err;
+	}  
 
-	  var db = client.db(config.db.name);
-	  var urlCollection = db.collection('urls');
+	rClient.exists(longUrl, function(err, reply) {
+    if (err) throw err;
+    if (reply === 1) {
+    	console.log('Exists');
+      rClient.get(longUrl, function(err, reply) {
+      	if (err) throw err;
+      	res.send(reply);
+      	return;
+			});
+    } else {
+    	console.log('Doesn\'t exists');
+    	var shortUrl = '';
 
-	  urlCollection.findOne({'long_url': longUrl}, function(err, doc) {
-	  	if (err) throw err;
+		  MongoClient.connect(db_url, function(err, client) {
+			  if (err) throw err;
 
-	  	if (doc) {
-	  		shortUrl = config.webhost + baseHash.encode(doc._id);
-	  		res.send(shortUrl);
-	  		client.close();
-	  		return;
-	  	}
-	  	else {
-	  		var countersCollection = db.collection('counters');
-	  		
-	  		countersCollection.findOne({_id: 'url_count'}, function(err, docs) {
-	  			if (err) throw err;
-	  			
-	  			var newId = docs.val;
+			  var db = client.db(config.db.name);
+			  var urlCollection = db.collection('urls');
 
-	  			countersCollection.update({_id: 'url_count'}, {$inc: {val: 1}}, function(err) {
-	  				if (err) throw err;
-	  				shortUrl = config.webhost + baseHash.encode(newId);
-	  				urlCollection.insert({_id: newId, long_url: longUrl}, function(err) {
-	  					if (err) throw err;
-	  					client.close();
-	  					res.send(shortUrl);
-	  					return;
-	  				});
-	  			});
-	  		});
-	  	}
+			  urlCollection.findOne({'long_url': longUrl}, function(err, doc) {
+			  	if (err) throw err;
 
-	  });
+			  	if (doc) {
+			  		shortUrl = config.webhost + baseHash.encode(doc._id);
+			  		rClient.set(longUrl, shortUrl);
+						res.send(shortUrl);
+			  		client.close();
+			  		return;
+			  	}
+			  	else {
+			  		var countersCollection = db.collection('counters');
+			  		
+			  		countersCollection.findOne({_id: 'url_count'}, function(err, docs) {
+			  			if (err) throw err;
+			  			
+			  			var newId = docs.val;
+
+			  			countersCollection.update({_id: 'url_count'}, {$inc: {val: 1}}, function(err) {
+			  				if (err) throw err;
+			  				shortUrl = config.webhost + baseHash.encode(newId);
+			  				rClient.set(longUrl, shortUrl);
+			  				urlCollection.insert({_id: newId, long_url: longUrl}, function(err) {
+			  					if (err) throw err;
+			  					client.close();
+			  					res.send(shortUrl);
+			  					return;
+			  				});
+			  			});
+			  		});
+			  	}
+			  });
+			});
+    }
 	});
 });
 
