@@ -17,6 +17,7 @@ MongoClient.connect(db_url, function(err, client) {
 		if (!docs)
 			countersCollection.insert({_id: 'url_count', val: 1});
 	});
+	client.close();
 });
 
 app.get('/', function(req, res) {
