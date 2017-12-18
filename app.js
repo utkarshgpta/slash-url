@@ -10,6 +10,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var db_url = config.db.host + ':' + config.db.port;
 
 MongoClient.connect(db_url, function(err, client) {
+	if (err) throw err;
 	var countersCollection = client.db(config.db.name).collection('counters');
 	countersCollection.findOne({_id: 'url_count'}, function(err, docs) {
 		if (err) throw err;
