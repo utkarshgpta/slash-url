@@ -64,7 +64,7 @@ You can also use [Nodemon](https://nodemon.io/) using ```nodemon app.js``` inste
  - Make a Chrome/Firefox extension using which we can select the URL to be shortened on the page, right click and select the option to shorten the URL, which then connects to our REST API, retrieves and copies to the clipboard - the shortened URL.
 
 ## Acknowledgement
-I started off learning about creating URL Shortener through this [blog](https://coligo.io/create-url-shortener-with-node-express-mongo/) where they used [Mongoose](mongoosejs.com/) instead of Native Mongo driver. 
+I started off learning about creating URL Shortener through this [blog](https://coligo.io/create-url-shortener-with-node-express-mongo/) where they used [Mongoose](https://mongoosejs.com/) instead of Native Mongo driver. 
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
