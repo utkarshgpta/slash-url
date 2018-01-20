@@ -11,21 +11,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', (process.env.PORT || 5000));
 
 var db_url = config.db.host + ':' + config.db.port;
-var rClient = redis.createClient();
+var rClient = redis.createClient(process.env.REDIS_URL);
 
 rClient.on('connect', function() {
     console.log('Redis Connected');
 });
 
 MongoClient.connect(db_url, function(err, client) {
-	if (err) throw err;
-	var countersCollection = client.db(config.db.name).collection('counters');
-	countersCollection.findOne({_id: 'url_count'}, function(err, docs) {
-		if (err) throw err;
-		if (!docs)
-			countersCollection.insert({_id: 'url_count', val: 1});
-	});
-	client.close();
+	if (err)
+		throw err;
+	else {
+		var countersCollection = client.db(config.db.name).collection('counters');
+		countersCollection.findOne({_id: 'url_count'}, function(err, docs) {
+			if (err) {
+				client.close();
+				throw err;
+			}
+			if (!docs){
+				countersCollection.insertOne({_id: 'url_count', val: 1}, function(){
+					client.close();
+				});
+			}
+			else client.close();
+		});
+	}
 });
 
 app.get('/', function(req, res) {
@@ -40,7 +49,7 @@ app.get('/api/shorten', function(req, res) {
 	if(!result.host) {
 		res.send("Not a valid URL");
 		return;
-	}  
+	}
 
 	rClient.exists(longUrl, function(err, reply) {
     if (err) throw err;
