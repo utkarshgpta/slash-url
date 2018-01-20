@@ -10,7 +10,11 @@ var baseHash = require('./baseHash.js');
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', (process.env.PORT || 5000));
 
-var db_url = config.db.host + ':' + config.db.port;
+var db_url;
+
+if (process.env.MONGODB_URI) db_url = process.env.MONGODB_URI;
+else db_url = config.db.host + ':' + config.db.port;
+
 var rClient = redis.createClient(process.env.REDIS_URL);
 
 rClient.on('connect', function() {
