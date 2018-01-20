@@ -15,6 +15,8 @@ var db_url;
 if (process.env.MONGODB_URI) db_url = process.env.MONGODB_URI;
 else db_url = config.db.host + ':' + config.db.port;
 
+console.log(db_url);
+
 var rClient = redis.createClient(process.env.REDIS_URL);
 
 rClient.on('connect', function() {
@@ -25,6 +27,7 @@ MongoClient.connect(db_url, function(err, client) {
 	if (err)
 		throw err;
 	else {
+		console.log("DB connected");
 		var countersCollection = client.db(config.db.name).collection('counters');
 		countersCollection.findOne({_id: 'url_count'}, function(err, docs) {
 			if (err) {
