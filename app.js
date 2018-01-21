@@ -13,7 +13,7 @@ app.set('port', (process.env.PORT || 5000));
 var db_url;
 
 if (process.env.MONGODB_URI) db_url = process.env.MONGODB_URI;
-else db_url = config.db.host + ':' + config.db.port;
+else db_url = config.db.localhost + ':' + config.db.port;
 
 console.log(db_url);
 
