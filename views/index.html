@@ -6,19 +6,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="An URL Shortener service project based on NodeJS and Redis" />
-    <meta name="keywords" content="node,nodejs,url shortner,redis,express,project">
+    <meta name="keywords" content="node,nodejs,url shortner,redis,express,project,slash url,express,heroku,app">
     <meta name="author" content="Utkarsh Gupta">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
+    <a href="https://github.com/UtkarshGpta/slash-url"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
     <div class="container" id="fullSpan">
       <div class="row h-100">
         <div class="col-md-12 my-auto">
-            <div class="mx-auto text-center">
+            <div style="color: white" class="mx-auto text-center">
+              <i class="fa fa-cut fa-3x"></i> <i class="fa fa-link fa-3x"></i>
+              <br>
               <h1 id="pageHeading">URL Shortener</h1>
+              <h5>SlashURL</h5>
               <form id="short" action="#">
                 <div class="form-group">
                   <input type="url" class="form-control text-center" id="urlField" placeholder="Enter a valid URL (https://www.google.com)" required="true">
