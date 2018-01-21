@@ -59,7 +59,7 @@ app.get('/', function(req, res) {
 app.get('/api/shorten', function(req, res) {
   var longUrl = req.headers.url;
   var result = url.parse(longUrl);
-	if(!result.protocol) longUrl = 'https://' + longUrl;
+	if(!result.protocol || longUrl.substring(0,4)=='www.') longUrl = 'https://' + longUrl;
 	result = url.parse(longUrl);
 	if(!result.host) {
 		res.send("Not a valid URL");
