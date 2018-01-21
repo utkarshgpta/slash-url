@@ -16,7 +16,7 @@
     "shortener",
     "nodejs",
     "mongodb",
-    "redis",
+    "redis"
   ],
   "author": "Utkarsh Gupta",
   "license": "ISC",
