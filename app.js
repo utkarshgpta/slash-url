@@ -24,24 +24,32 @@ rClient.on('connect', function() {
 });
 
 MongoClient.connect(db_url, function(err, client) {
-	if (err)
-		throw err;
-	else {
-		console.log("DB connected");
-		var countersCollection = client.db(config.db.name).collection('counters');
-		countersCollection.findOne({_id: 'url_count'}, function(err, docs) {
-			if (err) {
-				client.close();
-				throw err;
-			}
-			if (!docs){
-				countersCollection.insertOne({_id: 'url_count', val: 1}, function(){
+	if (err) throw err;
+	console.log("DB connected");
+	var db = client.db(config.db.name);
+	var query_arr = {_id: 'url_count'};
+	db.collection('counters').findOne(query_arr, function(err, res) {
+		if (err) {
+			client.close();
+			throw err;
+		}
+
+		if (!res){
+			var insert_arr = {_id: 'url_count', val: 1};
+			db.collection('counters').insertOne(insert_arr, function(err, res){
+				if (err) {
 					client.close();
-				});
-			}
-			else client.close();
-		});
-	}
+					throw err;
+				}
+				console.log("Counters Collection Inserted");
+				client.close();
+			});
+		}
+		else {
+			console.log("Counters exists!");
+			client.close();
+		}
+	});
 });
 
 app.get('/', function(req, res) {
@@ -61,14 +69,14 @@ app.get('/api/shorten', function(req, res) {
 	rClient.exists(longUrl, function(err, reply) {
     if (err) throw err;
     if (reply === 1) {
-    	console.log('Exists');
+    	console.log('URL already exists');
       rClient.get(longUrl, function(err, reply) {
       	if (err) throw err;
       	res.send(reply);
       	return;
 			});
     } else {
-    	console.log('Doesn\'t exists');
+    	console.log('URL doesn\'t exist');
     	var shortUrl = '';
 
 		  MongoClient.connect(db_url, function(err, client) {
