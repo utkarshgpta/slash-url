@@ -1,7 +1,7 @@
 {
-  "name": "short.en",
+  "name": "slash-url",
   "version": "1.0.0",
-  "description": "URL Shortener",
+  "description": "URL Shortener based on NodeJS and Redis",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -9,20 +9,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/UtkarshGpta/short.en.git"
+    "url": "git+https://github.com/UtkarshGpta/slash-url.git"
   },
   "keywords": [
     "url",
     "shortener",
     "nodejs",
-    "mongodb"
+    "mongodb",
+    "redis",
   ],
   "author": "Utkarsh Gupta",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/UtkarshGpta/short.en/issues"
+    "url": "https://github.com/UtkarshGpta/slash-url/issues"
   },
-  "homepage": "https://github.com/UtkarshGpta/short.en#readme",
+  "homepage": "https://github.com/UtkarshGpta/slash-url#readme",
   "dependencies": {
     "express": "^4.16.2",
     "mongodb": "^3.0.0-rc0",
